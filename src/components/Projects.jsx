@@ -3,7 +3,7 @@ import LabelChip from './LabelChip';
 
 // Evidencia del tablero. width/height reales para evitar saltos de layout (CLS).
 // Las capturas están anonimizadas: sin marca institucional, sin NIT ni razones
-// sociales de empresas, y recortadas al lienzo del informe.
+// sociales de empresas, sin nombres de terceros, y recortadas al lienzo útil.
 const SHOTS = [
   {
     src: '/images/dashboard-preview.png',
@@ -15,6 +15,7 @@ const SHOTS = [
   { src: '/images/Captura_2.png', label: 'Gestión de empresas', w: 1161, h: 700 },
   { src: '/images/Captura_3.png', label: 'Seguimiento territorial', w: 1552, h: 860 },
   { src: '/images/Captura_4.png', label: 'Enfoque de inclusión', w: 1552, h: 860 },
+  { src: '/images/Captura_5.png', label: 'Portada del dashboard', w: 1368, h: 790 },
 ];
 
 const TECH = ['Excel', 'Power BI', 'Python', 'SQL', 'Claude Code (IA)', 'HTML/JS'];
@@ -207,7 +208,7 @@ const Projects = () => {
               </button>
 
               {/* Miniaturas — 6 evidencias */}
-              <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
+              <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
                 {SHOTS.map((item, i) => (
                   <button
                     key={item.src}
