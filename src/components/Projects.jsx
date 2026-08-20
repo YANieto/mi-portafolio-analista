@@ -31,7 +31,7 @@ const Projects = () => {
             </div>
             
             <div className="flex gap-4">
-              <a href="#" className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700 transition">Ver Proyecto</a>
+              <a href="/tablero.html" target="_blank" rel="noopener noreferrer" className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700 transition">Ver Proyecto</a>
               <a href="#" className="border border-slate-300 text-slate-700 px-4 py-2 rounded font-medium hover:bg-slate-100 transition">GitHub</a>
             </div>
           </div>
