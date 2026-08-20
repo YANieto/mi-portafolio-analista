@@ -2,18 +2,19 @@ import { useCallback, useEffect, useState } from 'react';
 import LabelChip from './LabelChip';
 
 // Evidencia del tablero. width/height reales para evitar saltos de layout (CLS).
+// Las capturas están anonimizadas: sin marca institucional, sin NIT ni razones
+// sociales de empresas, y recortadas al lienzo del informe.
 const SHOTS = [
   {
     src: '/images/dashboard-preview.png',
-    label: 'Vista general del tablero',
+    label: 'Resumen ejecutivo',
     w: 1884,
     h: 937,
   },
-  { src: '/images/Captura_1.png', label: 'Panel de indicadores', w: 1376, h: 756 },
-  { src: '/images/Captura_2.png', label: 'Cumplimiento de metas', w: 1161, h: 700 },
-  { src: '/images/Captura_3.png', label: 'Distribución territorial', w: 1920, h: 1200 },
-  { src: '/images/Captura_4.png', label: 'Detalle por agencia', w: 1920, h: 1200 },
-  { src: '/images/Captura_5.png', label: 'Comparativo temporal', w: 1920, h: 1200 },
+  { src: '/images/Captura_1.png', label: 'Usuarios capacitados', w: 1376, h: 756 },
+  { src: '/images/Captura_2.png', label: 'Gestión de empresas', w: 1161, h: 700 },
+  { src: '/images/Captura_3.png', label: 'Seguimiento territorial', w: 1552, h: 860 },
+  { src: '/images/Captura_4.png', label: 'Enfoque de inclusión', w: 1552, h: 860 },
 ];
 
 const TECH = ['Excel', 'Power BI', 'Python', 'SQL', 'Claude Code (IA)', 'HTML/JS'];
@@ -206,7 +207,7 @@ const Projects = () => {
               </button>
 
               {/* Miniaturas — 6 evidencias */}
-              <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
+              <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-5">
                 {SHOTS.map((item, i) => (
                   <button
                     key={item.src}
