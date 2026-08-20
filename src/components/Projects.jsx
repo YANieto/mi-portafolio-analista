@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import LabelChip from './LabelChip';
 
 // Evidencia del tablero. width/height reales para evitar saltos de layout (CLS).
 const SHOTS = [
@@ -148,10 +149,10 @@ const Projects = () => {
       <div className="relative mx-auto max-w-6xl">
         {/* ---------- Encabezado ---------- */}
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
-            Portafolio
-          </p>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
+          <div className="flex justify-center">
+            <LabelChip tone="slate">Portafolio</LabelChip>
+          </div>
+          <h2 className="mt-5 text-4xl font-bold sm:text-5xl">
             <span className="bg-gradient-to-r from-slate-100 via-sky-200 to-indigo-300 bg-clip-text pb-1 text-transparent">
               Proyectos Destacados
             </span>
@@ -205,7 +206,7 @@ const Projects = () => {
               </button>
 
               {/* Miniaturas — 6 evidencias */}
-              <div className="mt-4 grid grid-cols-6 gap-2">
+              <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
                 {SHOTS.map((item, i) => (
                   <button
                     key={item.src}
@@ -242,10 +243,9 @@ const Projects = () => {
 
             {/* Contenido */}
             <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10">
-              <span className="inline-flex w-fit items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
-                Proyecto destacado
-              </span>
+              <div className="w-fit">
+                <LabelChip tone="emerald">Proyecto destacado</LabelChip>
+              </div>
 
               <h3 className="mt-4 text-2xl font-bold leading-snug text-slate-50 sm:text-3xl">
                 Tablero Integral y Estratégico de Empleo
@@ -253,7 +253,7 @@ const Projects = () => {
 
               <div className="mt-5 space-y-4">
                 <div className="rounded-xl border border-white/10 bg-surface-850/70 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-sky-400">
+                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-sky-400">
                     Problema analizado
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-slate-400">
@@ -263,7 +263,7 @@ const Projects = () => {
                 </div>
 
                 <div className="rounded-xl border border-white/10 bg-surface-850/70 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-sky-400">
+                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-sky-400">
                     Hallazgos principales
                   </p>
                   <div className="mt-3 grid grid-cols-2 gap-3">
@@ -285,7 +285,7 @@ const Projects = () => {
 
               {/* Herramientas */}
               <div className="mt-6">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-slate-400">
                   Herramientas utilizadas
                 </p>
                 <ul className="mt-3 flex flex-wrap gap-2">

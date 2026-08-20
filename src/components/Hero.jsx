@@ -1,4 +1,3 @@
-import React from 'react';
 
 // Ejes de trabajo — extraídos del propio perfil, sin métricas inventadas
 const FOCUS = [
@@ -25,9 +24,9 @@ const Hero = () => {
       <div className="relative mx-auto w-full max-w-5xl animate-fade-up">
         {/* Eyebrow */}
         <div className="flex justify-center">
-          <span className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-slate-300 backdrop-blur">
+          <span className="inline-flex items-center gap-2.5 rounded-md border border-white/15 bg-white/5 px-3 py-1.5 font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-slate-300 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-dot" />
-            Disponible para proyectos de analítica
+            Disponible para proyectos
           </span>
         </div>
 
@@ -85,43 +84,16 @@ const Hero = () => {
           {FOCUS.map(({ label, hint }) => (
             <div
               key={label}
-              className="rounded-xl border border-white/10 bg-surface-900/70 p-4 text-center shadow-card backdrop-blur transition-all duration-300 hover:scale-105 hover:border-sky-400/30 hover:bg-surface-850 hover:shadow-elevate"
+              className="rounded-xl border border-white/10 bg-surface-900/60 p-4 text-center backdrop-blur transition-all duration-300 hover:scale-105 hover:border-sky-400/30 hover:bg-surface-850 hover:shadow-elevate"
             >
               <p className="text-sm font-semibold text-slate-100">{label}</p>
-              <p className="mt-1 text-xs text-slate-400">{hint}</p>
+              <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-slate-400">
+                {hint}
+              </p>
             </div>
           ))}
         </div>
-
-        {/* Sobre mí */}
-        <div className="mt-12 rounded-2xl border border-white/10 bg-surface-900/70 p-6 shadow-card backdrop-blur transition-all duration-300 hover:border-white/20 hover:shadow-elevate sm:p-8">
-          <div className="flex items-center gap-3">
-            <span className="h-5 w-1 rounded-full bg-gradient-to-b from-sky-400 to-indigo-400" />
-            <h3 className="text-lg font-semibold text-slate-100">Sobre mí</h3>
-          </div>
-
-          <dl className="mt-5 grid gap-5 sm:grid-cols-2">
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-wider text-sky-400">
-                Formación
-              </dt>
-              <dd className="mt-2 text-sm leading-relaxed text-slate-400">
-                Especialista de Gerencia de Proyectos, Administrador de Recursos Humanos,
-                Diplomaturas en Power BI – Analítica de Datos con Inteligencia Artificial.
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs font-semibold uppercase tracking-wider text-sky-400">
-                Intereses y objetivos
-              </dt>
-              <dd className="mt-2 text-sm leading-relaxed text-slate-400">
-                Me apasiona resolver problemas de negocio complejos estructurando datos
-                dispersos. Mi objetivo es optimizar procesos operativos mediante
-                visualizaciones interactivas e IA.
-              </dd>
-            </div>
-          </dl>
-        </div>
+        {/* Formación y enfoque viven ahora en la ficha 2×2 de #habilidades */}
       </div>
     </section>
   );
