@@ -9,6 +9,14 @@ const SECTIONS = [
   { id: 'proyectos', label: 'Proyectos' },
 ];
 
+const SOCIAL = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/yeison-andres-nieto-bermudez-3b642324',
+  },
+  { label: 'GitHub', href: 'https://github.com/YANieto/mi-portafolio-analista' },
+];
+
 function App() {
   const [active, setActive] = useState('inicio');
   const [scrolled, setScrolled] = useState(false);
@@ -167,18 +175,21 @@ function App() {
           </div>
 
           <div className="flex items-center gap-3">
-            {[
-              { label: 'LinkedIn', href: '#' },
-              { label: 'GitHub', href: '#' },
-            ].map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-300 hover:scale-105 hover:border-sky-400/40 hover:bg-sky-400/10 hover:text-sky-300"
-              >
-                {label}
-              </a>
-            ))}
+            {SOCIAL.map(({ label, href }) => {
+              const external = href.startsWith('http');
+              return (
+                <a
+                  key={label}
+                  href={href}
+                  {...(external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  className="rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition-all duration-300 hover:scale-105 hover:border-sky-400/40 hover:bg-sky-400/10 hover:text-sky-300"
+                >
+                  {label}
+                </a>
+              );
+            })}
           </div>
         </div>
       </footer>
