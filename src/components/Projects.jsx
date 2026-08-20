@@ -68,15 +68,21 @@ const Lightbox = ({ index, onClose, onStep }) => {
         </svg>
       </button>
 
-      {/* La imagen nunca se recorta: object-contain dentro del viewport */}
-      <img
-        src={shot.src}
-        alt={`Tablero Integral y Estratégico de Empleo — ${shot.label}`}
-        width={shot.w}
-        height={shot.h}
+      {/* En pantalla ancha la imagen entra completa. En móvil, encajarla en 390 px
+          la vuelve ilegible, así que se muestra a altura de pantalla y el
+          contenedor se desplaza en horizontal. */}
+      <div
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[82vh] w-auto max-w-full rounded-xl border border-white/10 object-contain shadow-elevate"
-      />
+        className="max-w-full overflow-auto rounded-xl border border-white/10 shadow-elevate"
+      >
+        <img
+          src={shot.src}
+          alt={`Tablero Integral y Estratégico de Empleo — ${shot.label}`}
+          width={shot.w}
+          height={shot.h}
+          className="h-[74vh] w-auto max-w-none object-contain sm:h-auto sm:max-h-[80vh] sm:max-w-full"
+        />
+      </div>
 
       <div
         className="mt-5 flex items-center gap-3"
@@ -101,10 +107,13 @@ const Lightbox = ({ index, onClose, onStep }) => {
             <path d="M15 18l-6-6 6-6" />
           </svg>
         </button>
-        <p className="min-w-52 text-center text-sm font-medium text-slate-200">
+        <p className="min-w-40 text-center text-sm font-medium text-slate-200 sm:min-w-52">
           {shot.label}
           <span className="ml-2 text-slate-400">
             {index + 1}/{SHOTS.length}
+          </span>
+          <span className="mt-0.5 block text-xs font-normal text-slate-400 sm:hidden">
+            desliza para explorar
           </span>
         </p>
         <button
