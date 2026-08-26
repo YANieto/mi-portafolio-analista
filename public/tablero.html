@@ -531,6 +531,9 @@ table.datos th, table.datos td { padding: 7px 9px; text-align: left; border-bott
 table.datos th { font-weight: 600; color: var(--texto-2); font-size: 11.5px; white-space: nowrap; }
 table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric: tabular-nums; }
 table.datos tbody tr:hover { background: var(--plano); }
+.ceo-fila { cursor: pointer; }
+.ceo-detalle:hover { background: transparent; }
+.ceo-detalle .tabla-caja { margin: 4px 0 10px; }
 table.datos tfoot td { font-weight: 600; border-top: 1px solid var(--borde-fuerte); border-bottom: none; }
 table.datos .apagado { color: var(--texto-3); }
 
@@ -3800,6 +3803,107 @@ function paginaDocumentacion() {
   return html;
 }
 
+/* --- PANEL CEO ------------------------------------------------------------------------------------
+   Pedido por el usuario 2026-08-26: un ranking de desempeño por subregión, para decisiones
+   estratégicas, no navegación de cifras — página nueva, subregión primero, sede al hacer clic.
+
+   MÉTRICA ELEGIDA A PROPÓSITO: "cuántos indicadores con meta llegan al 100 % de cumplimiento
+   acumulado", no un puntaje ponderado entre indicadores. Un promedio de porcentajes entre Colocados,
+   Capacitados, Beneficios, etc. exigiría inventar cuánto pesa cada uno frente a los demás — el tipo
+   exacto de número no respaldado que este proyecto evita en todos los demás módulos. Un conteo de
+   "cuántos en meta" no pesa nada: cada indicador vale lo mismo, uno u otro, sin arbitrar importancia.
+
+   SIEMPRE año completo, sin filtro de período: las metas del modelo son anuales (mismo principio que
+   ya rige el resto del tablero — "con el período recortado no se muestra cumplimiento").
+   `_pct_acum` ya lo calcula `construir.js` para TODO indicador con meta, incluidos los de
+   Emprendimiento y Metas centros de empleo — se lee tal cual, sin recalcular nada aquí.
+
+   SEDE: usa CONVERSIÓN (colocados/registrados), la misma medida y la misma razón que
+   `bloqueDesempenoSede()` — las sedes no tienen metas definidas en el modelo (confirmado por el
+   usuario en una sesión anterior), así que el volumen no es comparable entre sedes de tamaños
+   distintos, pero la conversión sí. Deliberadamente NO reutiliza `bloqueDesempenoSede()`: ese bloque
+   sigue el filtro GLOBAL de subregión/período; este panel muestra las 11 subregiones a la vez y
+   siempre acumulado — mezclar los dos estados habría sido más confuso que una función propia. */
+function paginaPanelCEO() {
+  let html = '<div class="seccion-titulo">Desempeño por subregión</div>';
+  html += `<div class="seccion-nota">Cuenta cuántos indicadores con meta, de los que trae el modelo,
+    llegan o superan el 100&nbsp;% de cumplimiento acumulado — año completo; las metas son anuales y
+    no admiten un corte parcial. Ordenado de mejor a peor. Haz clic en una subregión para ver sus
+    sedes por conversión (colocados sobre buscadores registrados).</div>`;
+
+  const indicadoresConMeta = DATOS.indicadores.filter((i) => i.tiene_meta);
+  const filas = regiones.map((r) => {
+    const detalle = indicadoresConMeta.map((i) => {
+      const pct = r[i.clave + '_pct_acum'];
+      return { clave: i.clave, nombre: i.corto, pct: esNulo(pct) ? null : num(pct) };
+    }).filter((d) => d.pct !== null);
+    const enMeta = detalle.filter((d) => d.pct >= 100);
+    const bajoMeta = detalle.filter((d) => d.pct < 100).sort((a, b) => a.pct - b.pct);
+    return {
+      subregion: r.SUBREGION, enMeta: enMeta.length, total: detalle.length,
+      pctGlobal: detalle.length ? (enMeta.length / detalle.length) * 100 : 0,
+      bajoMeta,
+    };
+  });
+  filas.sort((a, b) => b.pctGlobal - a.pctGlobal || b.enMeta - a.enMeta);
+
+  html += '<div class="rejilla"><div class="tarjeta col-12"><div class="tabla-caja">';
+  html += '<table class="datos"><thead><tr><th>#</th><th>Subregión</th>'
+    + '<th class="num">Indicadores en meta</th><th>Por debajo de meta (el más lejos primero)</th>'
+    + '</tr></thead><tbody>';
+  filas.forEach((f, i) => {
+    const expandida = estado.paginas.ceoSubregion === f.subregion;
+    html += `<tr class="ceo-fila" data-ceo-sub="${esc(f.subregion)}">
+      <td>${i + 1}</td>
+      <td><strong>${esc(f.subregion)}</strong>${expandida ? ' <span class="apagado">▾</span>' : ' <span class="apagado">▸</span>'}</td>
+      <td class="num">${f.enMeta} / ${f.total} (${fmtPct(f.pctGlobal)})</td>
+      <td>${f.bajoMeta.length
+    ? f.bajoMeta.map((d) => `${esc(d.nombre)} (${fmtPct(d.pct)})`).join(' · ')
+    : '<span class="apagado">ninguno — todos en meta</span>'}</td>
+    </tr>`;
+    if (expandida) html += bloqueSedesDeSubregionCEO(f.subregion);
+  });
+  html += '</tbody></table></div></div></div>';
+
+  return html;
+}
+
+function bloqueSedesDeSubregionCEO(subregion) {
+  if (!CAR || !CAR.indicadores.colocados || !CAR.indicadores.hv_registradas) {
+    return `<tr class="ceo-detalle"><td></td><td colspan="3"><div class="tarjeta-sub">
+      Sin caracterización poblacional disponible: no se puede calcular conversión por sede.
+      </div></td></tr>`;
+  }
+  const sedes = new Map();
+  for (const [sede, v] of Object.entries(CAR.indicadores.colocados.porSede)) {
+    if (v.subregion !== subregion) continue;
+    sedes.set(sede, { sede, colocados: num(v.total), hv: 0 });
+  }
+  for (const [sede, v] of Object.entries(CAR.indicadores.hv_registradas.porSede)) {
+    if (v.subregion !== subregion) continue;
+    if (!sedes.has(sede)) sedes.set(sede, { sede, colocados: 0, hv: 0 });
+    sedes.get(sede).hv = num(v.total);
+  }
+  const filasSede = [...sedes.values()]
+    .map((s) => ({ ...s, conversion: s.hv ? (s.colocados / s.hv) * 100 : null }))
+    .sort((a, b) => (b.conversion ?? -1) - (a.conversion ?? -1));
+  if (!filasSede.length) {
+    return `<tr class="ceo-detalle"><td></td><td colspan="3"><div class="tarjeta-sub">
+      Sin sedes con datos para ${esc(subregion)}.</div></td></tr>`;
+  }
+
+  return `<tr class="ceo-detalle"><td></td><td colspan="3">
+    <div class="tabla-caja"><table class="datos">
+      <thead><tr><th>Sede</th><th class="num">Registrados</th><th class="num">Colocados</th>
+        <th class="num">Conversión</th></tr></thead>
+      <tbody>${filasSede.map((s) => `<tr><td>${esc(s.sede)}</td>`
+    + `<td class="num">${fmt(s.hv)}</td><td class="num">${fmt(s.colocados)}</td>`
+    + `<td class="num">${s.conversion === null ? '—' : fmtPct(s.conversion)}</td></tr>`).join('')}
+      </tbody>
+    </table></div>
+  </td></tr>`;
+}
+
 // --- Micro-interacciones nativas (CSS/WAAPI, sin librerías) -------------------------------------
 // Cuenta desde 0 hasta el valor final reutilizando `fmt()` en cada cuadro — así el número intermedio
 // sale con el MISMO formato (separador de miles, abreviado en M, decimales) que el valor final, sin
@@ -3843,6 +3947,7 @@ const PAGINAS = [
   { id: 'beneficios', nombre: 'Beneficios', fn: paginaBeneficios },
   { id: 'poblacional', nombre: 'Caracterización poblacional', fn: paginaPoblacional },
   { id: 'territorial', nombre: 'Territorial y tendencias', fn: paginaTerritorial },
+  { id: 'panel-ceo', nombre: 'Panel CEO', fn: paginaPanelCEO },
   { id: 'documentacion', nombre: 'Documentación', fn: paginaDocumentacion },
 ];
 
@@ -4094,6 +4199,13 @@ function conectar() {
     if (bp) {
       estado.paginas[bp.dataset.pag] = (estado.paginas[bp.dataset.pag] || 0) + Number(bp.dataset.dir);
       pintarTablaMunicipios();
+    }
+
+    const fc = e.target.closest('[data-ceo-sub]');
+    if (fc) {
+      const sub = fc.dataset.ceoSub;
+      estado.paginas.ceoSubregion = estado.paginas.ceoSubregion === sub ? null : sub;
+      pintar();
     }
   });
 }
