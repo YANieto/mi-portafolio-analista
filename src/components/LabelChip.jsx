@@ -2,6 +2,7 @@
 const TONES = {
   sky: 'border-sky-400/30 bg-sky-400/10 text-sky-300',
   emerald: 'border-emerald-400/30 bg-emerald-400/10 text-emerald-300',
+  indigo: 'border-indigo-400/30 bg-indigo-400/10 text-indigo-300',
   slate: 'border-white/15 bg-white/5 text-slate-300',
 };
 
