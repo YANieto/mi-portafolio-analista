@@ -47,7 +47,7 @@ const PROJECTS = [
     title: 'Dashboard Empleo y Emprendimiento',
     resumen:
       'Dashboard que reúne el seguimiento de la gestión de empleo y emprendimiento: colocación con enfoque de inclusión, acompañamiento Periscopio y ejecución de formación FOSFEC, con metas y cumplimiento por subregión.',
-    tech: ['Power BI'],
+    tech: ['Power BI', 'DAX', 'Modelado de Datos'],
     shots: [
       { src: '/images/Captura_5.png', label: 'Portada y navegación', w: 1368, h: 790 },
       { src: '/images/Captura_4.png', label: 'Colocados Inclusión', w: 1552, h: 860 },
@@ -62,7 +62,7 @@ const PROJECTS = [
     title: 'Gestión de Empresas',
     resumen:
       'Informe para el seguimiento de las empresas atendidas por la Agencia: vacantes y puestos de trabajo, personas remitidas y colocadas, participación en fomento empresarial y capacitación con recursos FOSFEC.',
-    tech: ['Power BI'],
+    tech: ['Power BI', 'DAX', 'Modelado de Datos'],
     shots: [
       { src: '/images/Captura_2.png', label: 'Gestión de empresas', w: 1161, h: 700 },
     ],
