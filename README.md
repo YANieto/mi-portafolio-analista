@@ -80,13 +80,28 @@ el fondo oscuro, por debajo del mínimo AA de 4.5:1.
 Se definen en la constante `PROJECTS` de `src/components/Projects.jsx`. Añadir uno es agregar un
 objeto a ese arreglo; el destacado es el primero.
 
-| Proyecto | Capturas |
-| --- | --- |
-| Tablero Integral y Estratégico de Empleo (HTML) | `dashboard-preview.png` |
-| Dashboard Empleo y Emprendimiento (Power BI) | `Captura_5`, `Captura_4`, `Captura_3`, `Captura_1` |
-| Gestión de Empresas (Power BI) | `Captura_2` |
+| Proyecto | Capturas | Herramientas |
+| --- | --- | --- |
+| Tablero Integral y Estratégico de Empleo (HTML) | `dashboard-preview.png` | Excel · Power BI · Python · SQL · Claude Code (IA) · HTML/JS |
+| Dashboard Empleo y Emprendimiento (Power BI) | `Captura_5`, `Captura_4`, `Captura_3`, `Captura_1` | Power BI · DAX · Modelado de Datos |
+| Gestión de Empresas (Power BI) | `Captura_2` | Power BI · DAX · Modelado de Datos |
 
 Cada proyecto lleva su propia galería. Con una sola captura no se muestra la tira de miniaturas.
+
+**Pendiente:** los dos proyectos de Power BI llevan un `resumen` que describe qué muestra cada
+informe, no su impacto. Falta que el autor aporte problema y hallazgos, como los tiene el
+destacado. Las cifras y conclusiones las escribe él: no se infieren de las capturas.
+
+### Alturas iguales entre tarjetas
+
+Las dos tarjetas secundarias se alinean con **subgrid**, no con alturas fijas. La rejilla declara
+dos filas —galería y contenido— y cada tarjeta las hereda con `lg:row-span-2 lg:grid-rows-subgrid`.
+Así ambas galerías comparten pista y el título y las herramientas caen en la misma línea, aunque un
+proyecto tenga cuatro capturas y el otro una.
+
+Sin números mágicos: al cambiar un texto o añadir una captura se recalcula solo. Solo aplica desde
+`lg`; apiladas en móvil cada tarjeta conserva su altura natural, porque igualarlas ahí solo añadiría
+espacio vacío.
 
 ### Galería y lightbox
 
