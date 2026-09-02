@@ -96,7 +96,7 @@ El estado actual de cada bloque:
 | Bloque | Origen |
 | --- | --- |
 | Tablero Integral · problema y hallazgos | Redactados por el autor |
-| Gestión de Empresas · problema | Redactado por el autor |
+| Gestión de Empresas · problema y solución | Redactados por el autor |
 | Dashboard Empleo y Emprendimiento · `Cifras destacadas` | Valores **transcritos** de las capturas del propio informe. La selección de cuáles destacar la hizo Claude, por instrucción explícita del autor |
 | Los dos `resumen` de Power BI | Redactados por Claude: describen qué muestra cada informe, no su impacto |
 

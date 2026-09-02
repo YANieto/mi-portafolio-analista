@@ -89,8 +89,10 @@ const PROJECTS = [
     title: 'Gestión de Empresas',
     resumen:
       'Informe para el seguimiento de las empresas atendidas por la Agencia: vacantes y puestos de trabajo, personas remitidas y colocadas, participación en fomento empresarial y capacitación con recursos FOSFEC.',
-    // Redactado por el autor.
-    problema: 'Trazabilidad de gestión de diferentes servicios y procesos.',
+    // Ambos redactados por el autor.
+    problema:
+      'Falta de identificación de los servicios y procesos brindados a las empresas desde cada subregión.',
+    solucion: 'Trazabilidad de gestión de diferentes servicios y procesos.',
     tech: ['Power BI', 'DAX', 'Modelado de Datos'],
     shots: [
       { src: '/images/Captura_2.png', label: 'Gestión de empresas', w: 1161, h: 700 },
@@ -305,10 +307,15 @@ const Gallery = ({ shots, current, onSelect, onZoom, compact = false }) => {
   );
 };
 
-/* Bloque etiquetado con la tipografía monoespaciada de ficha técnica */
-const InfoBlock = ({ label, children }) => (
+/* Bloque etiquetado con la tipografía monoespaciada de ficha técnica.
+   El tono separa lo que se encontró (sky) de lo que se hizo (emerald). */
+const InfoBlock = ({ label, tone = 'sky', children }) => (
   <div className="rounded-xl border border-white/10 bg-surface-850/70 p-4">
-    <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-sky-400">
+    <p
+      className={`font-mono text-[11px] font-medium uppercase tracking-[0.12em] ${
+        tone === 'emerald' ? 'text-emerald-400' : 'text-sky-400'
+      }`}
+    >
       {label}
     </p>
     {children}
@@ -506,12 +513,19 @@ const Projects = () => {
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-slate-400">{p.resumen}</p>
 
-                {(p.problema || p.hallazgos) && (
+                {(p.problema || p.solucion || p.hallazgos) && (
                   <div className="mt-5 space-y-4">
                     {p.problema && (
                       <InfoBlock label="Problema analizado">
                         <p className="mt-2 text-sm leading-relaxed text-slate-400">
                           {p.problema}
+                        </p>
+                      </InfoBlock>
+                    )}
+                    {p.solucion && (
+                      <InfoBlock label="Solución" tone="emerald">
+                        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                          {p.solucion}
                         </p>
                       </InfoBlock>
                     )}
