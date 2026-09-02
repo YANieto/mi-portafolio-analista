@@ -47,6 +47,33 @@ const PROJECTS = [
     title: 'Dashboard Empleo y Emprendimiento',
     resumen:
       'Dashboard que reúne el seguimiento de la gestión de empleo y emprendimiento: colocación con enfoque de inclusión, acompañamiento Periscopio y ejecución de formación FOSFEC, con metas y cumplimiento por subregión.',
+    // Cifras leídas de las propias capturas del informe. La selección de cuáles
+    // destacar la hizo Claude por instrucción explícita del autor; los valores
+    // no se calculan ni se infieren, se transcriben tal como los muestra el
+    // tablero. Sustituir por los hallazgos del autor cuando los aporte.
+    cifrasLabel: 'Cifras destacadas',
+    hallazgos: [
+      {
+        valor: '81%',
+        tono: 'sky',
+        texto: 'de las colocaciones con enfoque de inclusión (18.394 de 22.618)',
+      },
+      {
+        valor: '6.624',
+        tono: 'emerald',
+        texto: 'personas víctimas del conflicto colocadas',
+      },
+      {
+        valor: '128,9%',
+        tono: 'sky',
+        texto: 'de cumplimiento en formación en Oriente, frente a 40,2% en Nordeste',
+      },
+      {
+        valor: '60%',
+        tono: 'emerald',
+        texto: 'de la meta anual de Periscopio (1.109 de 1.850)',
+      },
+    ],
     tech: ['Power BI', 'DAX', 'Modelado de Datos'],
     shots: [
       { src: '/images/Captura_5.png', label: 'Portada y navegación', w: 1368, h: 790 },
@@ -62,6 +89,8 @@ const PROJECTS = [
     title: 'Gestión de Empresas',
     resumen:
       'Informe para el seguimiento de las empresas atendidas por la Agencia: vacantes y puestos de trabajo, personas remitidas y colocadas, participación en fomento empresarial y capacitación con recursos FOSFEC.',
+    // Redactado por el autor.
+    problema: 'Trazabilidad de gestión de diferentes servicios y procesos.',
     tech: ['Power BI', 'DAX', 'Modelado de Datos'],
     shots: [
       { src: '/images/Captura_2.png', label: 'Gestión de empresas', w: 1161, h: 700 },
@@ -276,6 +305,41 @@ const Gallery = ({ shots, current, onSelect, onZoom, compact = false }) => {
   );
 };
 
+/* Bloque etiquetado con la tipografía monoespaciada de ficha técnica */
+const InfoBlock = ({ label, children }) => (
+  <div className="rounded-xl border border-white/10 bg-surface-850/70 p-4">
+    <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-sky-400">
+      {label}
+    </p>
+    {children}
+  </div>
+);
+
+/* Rejilla de cifras. Los valores se transcriben del informe, no se calculan.
+   Una columna en móvil: a dos, la ficha queda en 116 px y el texto parte en
+   cinco líneas. */
+const KpiGrid = ({ items }) => (
+  <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+    {items.map((h) => (
+      <div
+        key={h.valor + h.texto}
+        className={`rounded-lg border border-white/5 bg-surface-900 p-3 transition-all duration-300 hover:scale-105 ${
+          h.tono === 'emerald' ? 'hover:border-emerald-400/30' : 'hover:border-sky-400/30'
+        }`}
+      >
+        <p
+          className={`text-2xl font-bold ${
+            h.tono === 'emerald' ? 'text-emerald-300' : 'text-sky-300'
+          }`}
+        >
+          {h.valor}
+        </p>
+        <p className="mt-1 text-xs leading-snug text-slate-400">{h.texto}</p>
+      </div>
+    ))}
+  </div>
+);
+
 const TechList = ({ items }) => (
   <ul className="mt-3 flex flex-wrap gap-2">
     {items.map((tech) => (
@@ -361,43 +425,15 @@ const Projects = () => {
               </h3>
 
               <div className="mt-5 space-y-4">
-                <div className="rounded-xl border border-white/10 bg-surface-850/70 p-4">
-                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-sky-400">
-                    Problema analizado
-                  </p>
+                <InfoBlock label="Problema analizado">
                   <p className="mt-2 text-sm leading-relaxed text-slate-400">
                     {featured.problema}
                   </p>
-                </div>
+                </InfoBlock>
 
-                <div className="rounded-xl border border-white/10 bg-surface-850/70 p-4">
-                  <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-sky-400">
-                    Hallazgos principales
-                  </p>
-                  <div className="mt-3 grid grid-cols-2 gap-3">
-                    {featured.hallazgos.map((h) => (
-                      <div
-                        key={h.valor}
-                        className={`rounded-lg border border-white/5 bg-surface-900 p-3 transition-all duration-300 hover:scale-105 ${
-                          h.tono === 'emerald'
-                            ? 'hover:border-emerald-400/30'
-                            : 'hover:border-sky-400/30'
-                        }`}
-                      >
-                        <p
-                          className={`text-2xl font-bold ${
-                            h.tono === 'emerald' ? 'text-emerald-300' : 'text-sky-300'
-                          }`}
-                        >
-                          {h.valor}
-                        </p>
-                        <p className="mt-1 text-xs leading-snug text-slate-400">
-                          {h.texto}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <InfoBlock label={featured.cifrasLabel ?? 'Hallazgos principales'}>
+                  <KpiGrid items={featured.hallazgos} />
+                </InfoBlock>
               </div>
 
               <div className="mt-6">
@@ -468,10 +504,28 @@ const Projects = () => {
                 <h3 className="mt-4 text-xl font-bold leading-snug text-slate-50 sm:text-2xl">
                   {p.title}
                 </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-400">
-                  {p.resumen}
-                </p>
-                <div className="mt-5">
+                <p className="mt-3 text-sm leading-relaxed text-slate-400">{p.resumen}</p>
+
+                {(p.problema || p.hallazgos) && (
+                  <div className="mt-5 space-y-4">
+                    {p.problema && (
+                      <InfoBlock label="Problema analizado">
+                        <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                          {p.problema}
+                        </p>
+                      </InfoBlock>
+                    )}
+                    {p.hallazgos && (
+                      <InfoBlock label={p.cifrasLabel ?? 'Hallazgos principales'}>
+                        <KpiGrid items={p.hallazgos} />
+                      </InfoBlock>
+                    )}
+                  </div>
+                )}
+
+                {/* mt-auto empuja las herramientas al pie de la tarjeta, para que
+                    queden alineadas entre proyectos con distinto contenido */}
+                <div className="mt-auto pt-5">
                   <p className="font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-slate-400">
                     Herramientas utilizadas
                   </p>

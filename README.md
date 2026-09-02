@@ -88,9 +88,24 @@ objeto a ese arreglo; el destacado es el primero.
 
 Cada proyecto lleva su propia galería. Con una sola captura no se muestra la tira de miniaturas.
 
-**Pendiente:** los dos proyectos de Power BI llevan un `resumen` que describe qué muestra cada
-informe, no su impacto. Falta que el autor aporte problema y hallazgos, como los tiene el
-destacado. Las cifras y conclusiones las escribe él: no se infieren de las capturas.
+### Procedencia de los textos y las cifras
+
+Regla de la casa: **las cifras y conclusiones las escribe el autor, no se infieren ni se calculan.**
+El estado actual de cada bloque:
+
+| Bloque | Origen |
+| --- | --- |
+| Tablero Integral · problema y hallazgos | Redactados por el autor |
+| Gestión de Empresas · problema | Redactado por el autor |
+| Dashboard Empleo y Emprendimiento · `Cifras destacadas` | Valores **transcritos** de las capturas del propio informe. La selección de cuáles destacar la hizo Claude, por instrucción explícita del autor |
+| Los dos `resumen` de Power BI | Redactados por Claude: describen qué muestra cada informe, no su impacto |
+
+Por eso ese bloque se titula **"Cifras destacadas"** y no "Hallazgos principales": son valores que
+el tablero muestra, no conclusiones analíticas del autor. Cuando él aporte los hallazgos, se
+sustituyen y se cambia la etiqueta con el campo `cifrasLabel`.
+
+**Pendiente:** Gestión de Empresas no tiene cifras. Sus campos numéricos son contadores de filtro,
+y los NIT y razones sociales se cubrieron al anonimizar la captura.
 
 ### Alturas iguales entre tarjetas
 
