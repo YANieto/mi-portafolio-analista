@@ -443,13 +443,15 @@ const Projects = () => {
         </article>
 
         {/* ---------- Resto de proyectos ---------- */}
-        <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        {/* subgrid alinea galería y contenido entre tarjetas: sin él, la que tiene
+            una sola captura arranca su texto más arriba y deja un hueco. */}
+        <div className="mt-6 grid gap-6 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
           {rest.map((p) => (
             <article
               key={p.id}
-              className="flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-surface-900 shadow-card transition-all duration-500 hover:-translate-y-1.5 hover:border-sky-400/25 hover:shadow-elevate"
+              className="flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-surface-900 shadow-card transition-all duration-500 hover:-translate-y-1.5 hover:border-sky-400/25 hover:shadow-elevate lg:row-span-2 lg:grid lg:grid-rows-subgrid"
             >
-              <div className="border-b border-white/10 bg-surface-850 p-5 sm:p-6">
+              <div className="flex flex-col justify-center border-b border-white/10 bg-surface-850 p-5 sm:p-6">
                 <Gallery
                   compact
                   shots={p.shots}
@@ -459,7 +461,7 @@ const Projects = () => {
                 />
               </div>
 
-              <div className="flex flex-1 flex-col p-6 sm:p-8">
+              <div className="flex flex-1 flex-col p-6 sm:p-8 lg:flex-none lg:flex">
                 <div className="w-fit">
                   <LabelChip tone={p.chipTone}>{p.chip}</LabelChip>
                 </div>
