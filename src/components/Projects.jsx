@@ -405,7 +405,7 @@ const Projects = () => {
             </span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-base text-slate-400">
-            Casos donde los datos dispersos se convirtieron en decisiones medibles.
+            Tres casos de analítica aplicada a la gestión de empleo y emprendimiento.
           </p>
         </div>
 

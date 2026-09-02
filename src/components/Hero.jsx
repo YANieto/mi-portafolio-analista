@@ -41,13 +41,14 @@ const Hero = () => {
           Analista de Datos Junior
         </p>
 
+        {/* Mismo contenido que el resumen original del autor, reordenado en tres
+            frases y en primera persona activa. No se añaden ni quitan claims. */}
         <p className="mx-auto mt-8 max-w-3xl text-center text-base leading-relaxed text-slate-400 sm:text-lg">
-          Analista de Datos especializado en procesos híbridos que integran el diseño de
-          matrices de KPIs y benchmarking corporativo con modelado predictivo y análisis
-          táctico. Capaz de estructurar bases de datos robustas, integrar múltiples fuentes
-          y ejecutar la limpieza, transformación y visualización avanzada de información
-          (Power BI, Excel). Mi enfoque consiste en traducir métricas complejas en
-          estrategias accionables para alinear operaciones con estándares internacionales y
+          Diseño matrices de KPIs y benchmarking corporativo, y los combino con modelado
+          predictivo y análisis táctico. Estructuro bases de datos robustas, integro
+          múltiples fuentes y ejecuto la limpieza, transformación y visualización avanzada
+          de la información en Power BI y Excel. Mi enfoque es traducir métricas complejas
+          en estrategias accionables: alinear la operación con estándares internacionales y
           optimizar el rendimiento empresarial.
         </p>
 
