@@ -13,7 +13,7 @@ const PROJECTS = [
     chipTone: 'emerald',
     title: 'Tablero Integral y Estratégico de Empleo',
     problema:
-      'Dificultad para visualizar de manera unificada y territorial el cumplimiento de metas en las Agencias de Empleo.',
+      'El cumplimiento de metas de las Agencias de Empleo no podía leerse de forma unificada ni por territorio.',
     hallazgos: [
       {
         valor: '39.2%',
@@ -46,7 +46,7 @@ const PROJECTS = [
     chipTone: 'sky',
     title: 'Dashboard Empleo y Emprendimiento',
     resumen:
-      'Dashboard que reúne el seguimiento de la gestión de empleo y emprendimiento: colocación con enfoque de inclusión, acompañamiento Periscopio y ejecución de formación FOSFEC, con metas y cumplimiento por subregión.',
+      'Reúne en un solo tablero la gestión de empleo y emprendimiento: colocación con enfoque de inclusión, acompañamiento Periscopio y ejecución de formación FOSFEC, con metas y cumplimiento por subregión.',
     // Cifras leídas de las propias capturas del informe. La selección de cuáles
     // destacar la hizo Claude por instrucción explícita del autor; los valores
     // no se calculan ni se infieren, se transcriben tal como los muestra el
@@ -66,7 +66,7 @@ const PROJECTS = [
       {
         valor: '128,9%',
         tono: 'sky',
-        texto: 'de cumplimiento en formación en Oriente, frente a 40,2% en Nordeste',
+        texto: 'de cumplimiento en formación en Oriente, frente al 40,2% de Nordeste',
       },
       {
         valor: '60%',
@@ -88,11 +88,12 @@ const PROJECTS = [
     chipTone: 'sky',
     title: 'Gestión de Empresas',
     resumen:
-      'Informe para el seguimiento de las empresas atendidas por la Agencia: vacantes y puestos de trabajo, personas remitidas y colocadas, participación en fomento empresarial y capacitación con recursos FOSFEC.',
+      'Seguimiento de las empresas atendidas por la Agencia: vacantes y puestos de trabajo, personas remitidas y colocadas, participación en fomento empresarial y capacitación con recursos FOSFEC.',
     // Ambos redactados por el autor.
     problema:
-      'Falta de identificación de los servicios y procesos brindados a las empresas desde cada subregión.',
-    solucion: 'Trazabilidad de gestión de diferentes servicios y procesos.',
+      'Los servicios y procesos prestados a las empresas no eran identificables por subregión.',
+    solucion:
+      'Trazabilidad de la gestión de cada servicio y proceso prestado a las empresas.',
     tech: ['Power BI', 'DAX', 'Modelado de Datos'],
     shots: [
       { src: '/images/Captura_2.png', label: 'Gestión de empresas', w: 1161, h: 700 },
