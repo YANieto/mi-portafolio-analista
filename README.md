@@ -107,32 +107,24 @@ sustituyen y se cambia la etiqueta con el campo `cifrasLabel`.
 **Pendiente:** Gestión de Empresas no tiene cifras. Sus campos numéricos son contadores de filtro,
 y los NIT y razones sociales se cubrieron al anonimizar la captura.
 
-### Un proyecto vivo, dos instantáneas
+### Las tarjetas son un registro, no un espejo del dato vivo
 
-Los tres proyectos no envejecen igual, y la diferencia es deliberada:
+El objetivo de esta sección es mostrar **qué proyectos se han desarrollado y qué problemas o
+hallazgos lograron visualizar**. No es replicar el estado actual de ningún informe.
 
-| Proyecto | Naturaleza |
-| --- | --- |
-| **Tablero Integral** | **Vivo.** Debe verse actualizado: `public/tablero.html` se regenera desde Power BI en cada corte y el botón "Ver proyecto" lo abre |
-| Dashboard Empleo y Emprendimiento | **Instantánea.** Muestra el estado del informe al momento de la captura |
-| Gestión de Empresas | **Instantánea.** Ídem |
+De ahí se siguen dos cosas, y las dos son intencionales:
 
-Que las dos instantáneas queden atrás no es un defecto: son evidencia fechada. **No hay que
-actualizarlas** cuando cambia el corte del tablero.
+- **Las capturas no se recapturan.** Congelan el estado del informe cuando se hizo el trabajo. Ese
+  estado ya no cambia.
+- **Las cifras de las tarjetas no se actualizan** cuando se regenera `public/tablero.html`. Son el
+  hallazgo que el trabajo produjo en su momento, no una lectura en vivo.
 
-El destacado sí. Al regenerar `tablero.html` hay que revisar las dos cosas, porque no se actualizan
-solas y si no, la tarjeta y el tablero que abre dicen cifras distintas:
+Consecuencia esperada, no un fallo: el botón "Ver proyecto" abre el tablero, que sigue vivo y va por
+un corte posterior al de la tarjeta. La tarjeta cuenta lo que el análisis reveló; el tablero muestra
+dónde va hoy.
 
-1. Los valores de `hallazgos` en la constante `PROJECTS` de `src/components/Projects.jsx`.
-2. La captura `public/images/dashboard-preview.png`, que lleva el corte en su encabezado.
-
-Comprobación rápida — el corte que sirve producción:
-
-```bash
-curl -s https://mi-portafolio-analista.vercel.app/tablero.html | grep -o "Corte: [A-Za-zé]* [0-9]*" | head -1
-```
-
-Las cifras nuevas las aporta el autor desde el modelo: **no se leen del HTML ni se recalculan aquí.**
+Si alguna vez hay que cambiar una cifra, la aporta el autor desde el modelo: **no se lee del HTML ni
+se recalcula aquí.**
 
 ### Alturas iguales entre tarjetas
 
