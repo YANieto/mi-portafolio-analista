@@ -107,17 +107,24 @@ sustituyen y se cambia la etiqueta con el campo `cifrasLabel`.
 **Pendiente:** Gestión de Empresas no tiene cifras. Sus campos numéricos son contadores de filtro,
 y los NIT y razones sociales se cubrieron al anonimizar la captura.
 
-### Las cifras del destacado caducan con el tablero
+### Un proyecto vivo, dos instantáneas
 
-Los hallazgos de **Tablero Integral** y su captura `dashboard-preview.png` corresponden a un corte
-concreto del tablero. `public/tablero.html` se regenera desde Power BI cada vez que hay corte nuevo,
-y **la tarjeta no se actualiza sola**: quedan diciendo cosas distintas la tarjeta y el tablero que
-abre el botón "Ver proyecto".
+Los tres proyectos no envejecen igual, y la diferencia es deliberada:
 
-Al regenerar `tablero.html`, revisar siempre las dos cosas:
+| Proyecto | Naturaleza |
+| --- | --- |
+| **Tablero Integral** | **Vivo.** Debe verse actualizado: `public/tablero.html` se regenera desde Power BI en cada corte y el botón "Ver proyecto" lo abre |
+| Dashboard Empleo y Emprendimiento | **Instantánea.** Muestra el estado del informe al momento de la captura |
+| Gestión de Empresas | **Instantánea.** Ídem |
+
+Que las dos instantáneas queden atrás no es un defecto: son evidencia fechada. **No hay que
+actualizarlas** cuando cambia el corte del tablero.
+
+El destacado sí. Al regenerar `tablero.html` hay que revisar las dos cosas, porque no se actualizan
+solas y si no, la tarjeta y el tablero que abre dicen cifras distintas:
 
 1. Los valores de `hallazgos` en la constante `PROJECTS` de `src/components/Projects.jsx`.
-2. La captura `public/images/dashboard-preview.png`, que muestra el corte en su encabezado.
+2. La captura `public/images/dashboard-preview.png`, que lleva el corte en su encabezado.
 
 Comprobación rápida — el corte que sirve producción:
 
