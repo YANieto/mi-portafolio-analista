@@ -107,6 +107,26 @@ sustituyen y se cambia la etiqueta con el campo `cifrasLabel`.
 **Pendiente:** Gestión de Empresas no tiene cifras. Sus campos numéricos son contadores de filtro,
 y los NIT y razones sociales se cubrieron al anonimizar la captura.
 
+### Las cifras del destacado caducan con el tablero
+
+Los hallazgos de **Tablero Integral** y su captura `dashboard-preview.png` corresponden a un corte
+concreto del tablero. `public/tablero.html` se regenera desde Power BI cada vez que hay corte nuevo,
+y **la tarjeta no se actualiza sola**: quedan diciendo cosas distintas la tarjeta y el tablero que
+abre el botón "Ver proyecto".
+
+Al regenerar `tablero.html`, revisar siempre las dos cosas:
+
+1. Los valores de `hallazgos` en la constante `PROJECTS` de `src/components/Projects.jsx`.
+2. La captura `public/images/dashboard-preview.png`, que muestra el corte en su encabezado.
+
+Comprobación rápida — el corte que sirve producción:
+
+```bash
+curl -s https://mi-portafolio-analista.vercel.app/tablero.html | grep -o "Corte: [A-Za-zé]* [0-9]*" | head -1
+```
+
+Las cifras nuevas las aporta el autor desde el modelo: **no se leen del HTML ni se recalculan aquí.**
+
 ### Alturas iguales entre tarjetas
 
 Las dos tarjetas secundarias se alinean con **subgrid**, no con alturas fijas. La rejilla declara
