@@ -451,6 +451,9 @@ main { padding: 20px 24px 64px; max-width: 1480px; margin: 0 auto; }
 .ficha .delta .flecha { font-size: 11px; }
 .delta-sube { color: var(--delta-sube); }
 .delta-baja { color: var(--critico); }
+/* Cumplimiento por debajo del umbral en "Resultados y cumplimiento por subregión". Rojo + negrita:
+   el color solo no basta (daltonismo / impresión), la negrita lo acompaña. */
+td.bajo-meta, .bajo-meta { color: var(--critico); font-weight: 600; }
 .delta-neutro { color: var(--texto-2); }
 
 .ficha .pie { font-size: 11.5px; color: var(--texto-3); margin-top: 7px; }
@@ -1795,11 +1798,14 @@ function avisoHTML(a) {
 }
 
 // Tabla equivalente de un gráfico, con total cuando la suma tiene sentido.
+// `opciones.bajos` (opcional): matriz paralela de booleanos [fila][columna]; la celda marcada `true` se
+// pinta en rojo (clase `bajo-meta`). `opciones.bajosTotal` hace lo mismo con la fila de total.
 function tablaDe(datos, cabeceras, opciones = {}) {
-  const filas = datos.map((f) => `<tr>${f.map((c, i) =>
-    `<td class="${cabeceras[i].num ? 'num' : ''}">${c === null || c === undefined ? '<span class="apagado">—</span>' : esc(c)}</td>`).join('')}</tr>`).join('');
+  const clase = (i, rojo) => [cabeceras[i].num ? 'num' : '', rojo ? 'bajo-meta' : ''].filter(Boolean).join(' ');
+  const filas = datos.map((f, k) => `<tr>${f.map((c, i) =>
+    `<td class="${clase(i, opciones.bajos && opciones.bajos[k] && opciones.bajos[k][i])}">${c === null || c === undefined ? '<span class="apagado">—</span>' : esc(c)}</td>`).join('')}</tr>`).join('');
   const pie = opciones.total
-    ? `<tfoot><tr>${opciones.total.map((c, i) => `<td class="${cabeceras[i].num ? 'num' : ''}">${esc(c ?? '')}</td>`).join('')}</tr></tfoot>` : '';
+    ? `<tfoot><tr>${opciones.total.map((c, i) => `<td class="${clase(i, opciones.bajosTotal && opciones.bajosTotal[i])}">${esc(c ?? '')}</td>`).join('')}</tr></tfoot>` : '';
   return `<div class="tabla-caja"><table class="datos">
     <thead><tr>${cabeceras.map((c) => `<th class="${c.num ? 'num' : ''}">${esc(c.t)}</th>`).join('')}</tr></thead>
     <tbody>${filas}</tbody>${pie}</table></div>`;
@@ -2454,7 +2460,7 @@ function paginaResumen() {
   html += tablaResultadosSubregion(
     'res-personas', 'Resultados y cumplimiento por subregión · Personas',
     ['hv_registradas', 'hv_actualizadas', 'remisiones', 'colocados', 'sociolaboral',
-      'periscopio', 'taller_grupal', 'entrevistas'],
+      'periscopio', 'taller_grupal', 'entrevistas'], 95,
   );
   html += tablaResultadosSubregion(
     'res-empresas', 'Resultados y cumplimiento por subregión · Empresas y Beneficios',
@@ -2472,7 +2478,9 @@ function paginaResumen() {
 // Siempre año completo, igual que el Panel CEO (`paginaPanelCEO`) y el resto de bloques de
 // cumplimiento de esta página — las metas son anuales, así que un período recortado no tiene un
 // denominador correcto contra el cual comparar (mismo principio ya aplicado en toda la app).
-function tablaResultadosSubregion(id, titulo, claves) {
+// `umbralRojo` (opcional, en %): los "% Cumpl" por debajo de ese valor se pintan en rojo. Pedido del
+// usuario (2026-10-29) solo para la tabla de Personas, con umbral 95 %.
+function tablaResultadosSubregion(id, titulo, claves, umbralRojo) {
   const indicadoresInfo = claves.map((c) => DATOS.indicadores.find((i) => i.clave === c)).filter(Boolean);
   const cabeceras = [{ t: 'Subregión' }];
   indicadoresInfo.forEach((i) => {
@@ -2495,6 +2503,20 @@ function tablaResultadosSubregion(id, titulo, claves) {
   const filas = filasOrdenadas.map(construirFila);
   const filaPie = filaTotal ? construirFila(filaTotal) : null;
   if (filaPie) filaPie[0] = 'Total';
+  // Matriz de celdas en rojo: solo las columnas "% Cumpl" con un valor real por debajo del umbral.
+  const marcarBajos = (r) => {
+    const m = [false];
+    indicadoresInfo.forEach((i) => {
+      m.push(false);
+      if (i.tiene_meta) { const pct = r[i.clave + '_pct_acum']; m.push(umbralRojo != null && !esNulo(pct) && num(pct) < umbralRojo); }
+    });
+    return m;
+  };
+  const opcionesTabla = {};
+  if (umbralRojo != null) {
+    opcionesTabla.bajos = filasOrdenadas.map(marcarBajos);
+    if (filaPie) { opcionesTabla.total = filaPie; opcionesTabla.bajosTotal = marcarBajos(filaTotal); }
+  } else if (filaPie) opcionesTabla.total = filaPie;
 
   const csvCabeceras = ['Subregión'];
   indicadoresInfo.forEach((i) => { csvCabeceras.push(i.corto); if (i.tiene_meta) csvCabeceras.push('% Cumplimiento'); });
@@ -2514,14 +2536,15 @@ function tablaResultadosSubregion(id, titulo, claves) {
     </div>
     <div class="tarjeta-sub">Acumulado del año completo, ordenado alfabéticamente por subregión — igual
       que el resto del cumplimiento de esta página, no responde al filtro de mes porque las metas son
-      anuales. "% Cumpl" solo aparece en los indicadores que el modelo trae con meta.</div>
+      anuales. "% Cumpl" solo aparece en los indicadores que el modelo trae con meta.${umbralRojo != null
+    ? ` <span class="bajo-meta">En rojo: cumplimiento por debajo de ${umbralRojo} %.</span>` : ''}</div>
     <div id="${id}-cont"></div>
   </div>`;
 
   trasPintar(() => {
     const cont = document.getElementById(id + '-cont');
     if (!cont) return;
-    cont.innerHTML = tablaDe(filas, cabeceras, filaPie ? { total: filaPie } : undefined);
+    cont.innerHTML = tablaDe(filas, cabeceras, opcionesTabla);
     registrarCSV(id, csvCabeceras, csvFilas, id);
   });
   return html;
